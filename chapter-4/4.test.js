@@ -1,5 +1,5 @@
 const { downTo } = require("../chapter-1/utils");
-const { Bottle } = require("./3");
+const { Bottle } = require("./4");
 describe("Bottles", () => {
   test("the first verse", () => {
     const expected =
