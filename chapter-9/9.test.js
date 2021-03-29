@@ -1,0 +1,137 @@
+const { downTo } = require("../chapter-1/utils");
+const {
+  CountdownSong,
+  BottleNumber,
+  BottleNumber0,
+  BottleNumber1,
+  BottleNumber6,
+  BottleVerse,
+} = require("./9");
+
+class VerseFake {
+  static lyrics(number) {
+    return `This is verse ${number}.\n`;
+  }
+}
+
+const testPlaysVerseRole = (rolePlayer) => {
+  test("plays verse role", () => {
+    expect(rolePlayer).toHaveProperty("lyrics", expect.any(Function));
+  });
+};
+
+describe("CountdownSong", () => {
+  test("verse", () => {
+    const expected = `This is verse 500.\n`;
+    expect(new CountdownSong(VerseFake).verse(500)).toBe(expected);
+  });
+  test("verses", () => {
+    const expected =
+      `This is verse 99.\n` +
+      `\n` +
+      `This is verse 98.\n` +
+      `\n` +
+      `This is verse 97.\n`;
+    expect(new CountdownSong(VerseFake).verses(99, 97)).toBe(expected);
+  });
+
+  test("the whole song", () => {
+    const expected =
+      `This is verse 47.\n` +
+      `\n` +
+      `This is verse 46.\n` +
+      `\n` +
+      `This is verse 45.\n` +
+      `\n` +
+      `This is verse 44.\n` +
+      `\n` +
+      `This is verse 43.\n`;
+    expect(new CountdownSong(VerseFake, 47, 43).song()).toBe(expected);
+  });
+
+  test("pronoun", () => {
+    expect(new BottleNumber1(1).pronoun()).toBe("it");
+  });
+});
+
+describe("BottleNumber", () => {
+  test("return correct class for given number", () => {
+    expect(BottleNumber.for(0).constructor).toBe(BottleNumber0);
+    expect(BottleNumber.for(1).constructor).toBe(BottleNumber1);
+    expect(BottleNumber.for(6).constructor).toBe(BottleNumber6);
+    expect(BottleNumber.for(3).constructor).toBe(BottleNumber);
+    expect(BottleNumber.for(7).constructor).toBe(BottleNumber);
+    expect(BottleNumber.for(42).constructor).toBe(BottleNumber);
+  });
+});
+
+describe("BottleVerse", () => {
+  testPlaysVerseRole(BottleVerse);
+
+  it("verse general rule upper bound", () => {
+    const expected =
+      `99 bottles of milk on the wall, ` +
+      `99 bottles of milk.\n` +
+      `Take one down and pass it around, ` +
+      `98 bottles of milk on the wall.\n`;
+    expect(BottleVerse.lyrics(99)).toBe(expected);
+  });
+
+  test("verse general rule lower bound", () => {
+    const expected =
+      `3 bottles of milk on the wall, ` +
+      `3 bottles of milk.\n` +
+      `Take one down and pass it around, ` +
+      `2 bottles of milk on the wall.\n`;
+    expect(BottleVerse.lyrics(3)).toBe(expected);
+  });
+
+  test("7 verse", () => {
+    const expected =
+      `7 bottles of milk on the wall, ` +
+      `7 bottles of milk.\n` +
+      `Take one down and pass it around, ` +
+      `1 six-pack of milk on the wall.\n`;
+    expect(BottleVerse.lyrics(7)).toBe(expected);
+  });
+
+  test("6 verse", () => {
+    const expected =
+      `1 six-pack of milk on the wall, ` +
+      `1 six-pack of milk.\n` +
+      `Take one down and pass it around, ` +
+      `5 bottles of milk on the wall.\n`;
+    expect(BottleVerse.lyrics(6)).toBe(expected);
+  });
+
+  test("verse 2", () => {
+    const expected =
+      `2 bottles of milk on the wall, ` +
+      `2 bottles of milk.\n` +
+      `Take one down and pass it around, ` +
+      `1 bottle of milk on the wall.\n`;
+    expect(BottleVerse.lyrics(2)).toBe(expected);
+  });
+
+  test("verse 1", () => {
+    const expected =
+      `1 bottle of milk on the wall, ` +
+      `1 bottle of milk.\n` +
+      `Take it down and pass it around, ` +
+      `no more bottles of milk on the wall.\n`;
+    expect(BottleVerse.lyrics(1)).toBe(expected);
+  });
+
+  test("verse 0", () => {
+    const expected =
+      `No more bottles of milk on the wall, ` +
+      `no more bottles of milk.\n` +
+      `Go to the store and buy some more, ` +
+      `99 bottles of milk on the wall.\n`;
+    expect(BottleVerse.lyrics(0)).toBe(expected);
+  });
+});
+
+describe("VerseFake", () => {
+  testPlaysVerseRole(VerseFake);
+});
